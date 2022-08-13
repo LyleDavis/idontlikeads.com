@@ -1,0 +1,42 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    name: Deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.96.0'
+          extended: true
+      - name: Development Build
+        if: github.ref != 'refs/heads/master'
+        run: hugo --minify
+        env:
+          HUGO_ENV: development
+      - name: Production Build
+        if: github.ref == 'refs/heads/master'
+        run: hugo --minify
+        env:
+          HUGO_ENV: production
+          HUGO_BASEURL: https://idontlikeads.com
+      - name: Publish
+        uses: cloudflare/pages-action@1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: idontlikeads
+          directory: public
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deployment URL
+        run: echo "${{ steps.publish.outputs.url }}"
