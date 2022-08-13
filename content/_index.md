@@ -8,6 +8,6 @@ keywords:
   - spam
 ---
 
-# 👋
+# 🙏
 
-Please stop it. It's driving me insane.
+Please stop it. The constant popups, auto-played video, and massive advertising spaces between paragraphs in articles are slowly eating away at the last remnants of my sanity.
