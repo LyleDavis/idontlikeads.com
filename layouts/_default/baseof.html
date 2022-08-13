@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="{{ .Site.Language }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="{{ .Site.Params.description }}">
+        {{ if eq (getenv "HUGO_ENV") "production" }}
+        <meta name="robots" content="index,follow">
+        {{ else }}
+        <meta name="robots" content="noindex,nofollow">
+        {{ end }}
+        <meta name="keywords" content="{{ if .Params.Keywords }}{{ delimit .Params.Keywords ", " }}{{ end }}">
+        <link rel="canonical" href="{{ .Permalink }}" />
+        
+        {{ $title := print .Site.Title " | " .Title }}
+        {{ if .IsHome }}{{ $title = .Site.Title }}{{ end }}
+        <title>{{ $title }}</title>
+
+        {{ $styles := resources.Get "bundle.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+        <style>{{ $styles.Content | safeCSS }}</style>
+    
+        {{- $options := dict "targetPath" "theming.js" -}}
+        {{- $themingScriptsBundle := resources.Get "theming.js" | js.Build $options | resources.Minify | resources.Fingerprint -}}
+        <script>{{ $themingScriptsBundle.Content | safeJS }}</script>
+    
+        {{- $options := dict "targetPath" "bundle.js" -}}
+        {{- $jsBundle := resources.Get "bundle.js" | js.Build $options | resources.Minify | resources.Fingerprint -}}
+        <script defer src="{{ $jsBundle.RelPermalink }}" integrity="{{ $jsBundle.Data.Integrity }}"></script>
+    </head>
+    
+    <body>
+        <header class="navigation">
+            <nav>
+                <a id="title" href="/"><b>{{ print .Site.Title }}</b></a>
+                <ul>
+                    <li><a href="/index.xml"><i data-feather="rss">RSS</i></a></li>
+                    <li id="switch-to-light-mode"><button class="theme-changer"><i data-feather="sun">light mode</i></button></li>
+                    <li id="switch-to-dark-mode"><button class="theme-changer"><i data-feather="moon">dark mode</i></button></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            {{ block "main" . }}{{ end }}
+        </main>
+
+        <footer>
+            <p><a href="/sitemap.xml">sitemap</a> | © {{ now.Format "2006"}}. All rights reserved. Contact me at <a href="mailto:me@falstaff.dev">me@falstaff.dev</a></p>
+        </footer>
+    </body>
+</html>
