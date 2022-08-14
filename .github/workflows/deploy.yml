@@ -10,6 +10,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      pull-requests: write
     name: Deploy
     steps:
       - name: Checkout
@@ -41,8 +42,6 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/github-script@v5
         if: github.ref != 'refs/heads/master'
-        permissions:
-          pull-requests: write
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
