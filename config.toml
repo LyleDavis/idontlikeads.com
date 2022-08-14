@@ -12,4 +12,5 @@ disableKinds = ["taxonomy", "term"]
 
 [params]
     description = "I don't like ads. You don't like ads. Please stop."
+    github_url = "https://github.com/LyleDavis/idontlikeads.com"
 
