@@ -40,6 +40,7 @@ jobs:
           projectName: idontlikeads
           directory: public
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref_name }}
       - uses: actions/github-script@v5
         if: github.ref != 'refs/heads/master'
         with:
