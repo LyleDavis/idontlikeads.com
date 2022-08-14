@@ -10,6 +10,7 @@ jobs:
     permissions:
       contents: read
       deployments: write
+      pull-requests: write
     name: Deploy
     steps:
       - name: Checkout
@@ -39,5 +40,14 @@ jobs:
           projectName: idontlikeads
           directory: public
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Deployment URL
-        run: echo "${{ steps.publish.outputs.url }}"
+      - uses: actions/github-script@v5
+        if: github.ref != 'refs/heads/master'
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅  `${{ steps.publish.outputs.id }}` deployed to `${{ steps.publish.outputs.environment }}` at `${{ steps.publish.outputs.url }}`!'
+            })
