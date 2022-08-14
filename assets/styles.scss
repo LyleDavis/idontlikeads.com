@@ -22,18 +22,16 @@ body {
 }
 
 header {
-    background-color: var(--bg-colour-header);
     height: 2.5em;
     margin: auto;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 1.5rem 0 rgba(0, 0, 0, 0.15);
     font-size: larger;
 
     nav {
         display: flex;
         height: 100%;
-        flex-direction: row;
+        flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
         margin: auto;
